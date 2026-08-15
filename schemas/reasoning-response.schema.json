@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/reasoning-response.schema.json",
+  "title": "Reasoning Response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "answer",
+    "rationale",
+    "evidence",
+    "assumptions",
+    "checks",
+    "requires_follow_up",
+    "follow_up_question"
+  ],
+  "properties": {
+    "answer": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 600,
+      "description": "Concise user-safe rationale. Not raw chain-of-thought."
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "fact", "relevance"],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "fact": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 400
+          },
+          "relevance": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      }
+    },
+    "checks": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      }
+    },
+    "requires_follow_up": {
+      "type": "boolean"
+    },
+    "follow_up_question": {
+      "type": ["string", "null"],
+      "maxLength": 300
+    }
+  },
+  "not": {
+    "anyOf": [
+      { "required": ["chain_of_thought"] },
+      { "required": ["hidden_reasoning"] },
+      { "required": ["scratchpad"] },
+      { "required": ["private_notes"] },
+      { "required": ["system_prompt"] },
+      { "required": ["developer_message"] },
+      { "required": ["thought_signature"] }
+    ]
+  }
+}
